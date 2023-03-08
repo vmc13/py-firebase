@@ -4,27 +4,50 @@ import json
 link = "https://api-ba-firebase-default-rtdb.firebaseio.com/"
 
 # CREATE
-#dados = {
-#    "img": "https://pig.png",
-#    "status": "nao lido"
-#}
-#requisicao = requests.post(f'{link}/Imagens.json', data=json.dumps(dados))
-#print(requisicao)
-#print(requisicao.text)
+'''
+dados = {
+    "img": "https://pig.png",
+    "status": "nao lido"
+}
+requisicao = requests.post(f'{link}/Imagens.json', data=json.dumps(dados))
+print(requisicao)
+print(requisicao.text)
+'''
 
 # ESPECIFICAR
 req =  requests.get(f'{link}/Imagens/.json')
 print(req)
 
+# transforma o bd json em dict python
 dic_req = req.json()
+
+# adicionar as chaves numa lista
+list_keys = []
+
+for items in dic_req.keys():
+    #print(items)
+    list_keys.append(items)
+
+#print(list_keys[0])
+
 
 for item_id in dic_req:
     image = dic_req[item_id]['img']
     status = dic_req[item_id]['status']
+    #print(item_id)
+    #print(dic_req)
     if status == "nao lido":
-        print(image)
         dados = {"status": "lido"}
-        requisicao = requests.patch(f'{link}/Imagens/-NPxvFyXxMmXvHw27-mo/.json', data=json.dumps(dados))
+        requisicao = requests.patch(f'{link}/Imagens/{item_id}/.json', data=json.dumps(dados))
+        print(image)
+    
+
+
+
 
 # função para escutar
 # printar só a primeira da fila da não lida
+# while true com condicional status
+# buscar do while true atraves de [item_id]['status'][1]
+# alterar status
+
