@@ -14,7 +14,7 @@ print(requisicao)
 print(requisicao.text)
 '''
 
-# ESPECIFICAR
+# GET AND PATCH: ESPECIFICAR
 req =  requests.get(f'{link}/Imagens/.json')
 print(req)
 
@@ -29,26 +29,19 @@ for items in dic_req.keys():
     #print(items)
     list_keys.append(items)
 
-#print(list_keys[0])
-
 
 for item_id in dic_req:
     image = dic_req[item_id]['img']
     status = dic_req[item_id]['status']
-    #print(item_id)
-    #print(dic_req)
-    if status == "lido":
-        dados = {"status": "nao lido"}
+    if status == "nao lido":
+        dados = {"status": "lido"}
         requisicao = requests.patch(f'{link}/Imagens/{item_id}/.json', data=json.dumps(dados))
         print(image)
     
 
+    
 
 
-
-# função para escutar
-# printar só a primeira da fila da não lida
-# while true com condicional status
-# buscar do while true atraves de [item_id]['status'][1]
-# alterar status
+# function to listen
+# take the first unread
 

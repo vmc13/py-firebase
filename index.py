@@ -10,7 +10,7 @@ firebaseConfig = {
   storageBucket: "api-ba-firebase.appspot.com",
   messagingSenderId: "282711538023",
   appId: "1:282711538023:web:32dd2aaf7a106f8cf617c2"
-};
+}
 
 cred = credentials.Certificate("./serviceAccountKey.json")
 firebase_admin.initialize_app(cred)
