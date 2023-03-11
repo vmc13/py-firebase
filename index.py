@@ -1,28 +1,33 @@
-import pyrebase
-import firebase_admin
-from firebase_admin import credentials
-
-firebaseConfig = {
-  apiKey: "AIzaSyC2jah77EY53J-7xPBtg3sru8fkExCQvJ4",
-  authDomain: "api-ba-firebase.firebaseapp.com",
-  databaseURL: "https://api-ba-firebase-default-rtdb.firebaseio.com/",
-  projectId: "api-ba-firebase",
-  storageBucket: "api-ba-firebase.appspot.com",
-  messagingSenderId: "282711538023",
-  appId: "1:282711538023:web:32dd2aaf7a106f8cf617c2"
-}
-
-cred = credentials.Certificate("./serviceAccountKey.json")
-firebase_admin.initialize_app(cred)
+import requests
+import json
 
 link = "https://api-ba-firebase-default-rtdb.firebaseio.com/"
 
-db = firebase.database()
-users = db.child("users").get()
+# GET AND PATCH FOR ESPECIFIC PATHS
+req =  requests.get(f'{link}/Imagens/.json') # bd em json
+print(req)
 
-def stream_handler(message):
-    print(message["event"]) # tipo de evento
-    print(message["path"]) # caminho do nó
-    print(message["data"]) # dados
+# transforma o bd json em dict python
+dic_req = req.json()
 
-my_stream = db.child("users").stream(stream_handler)
+# lista com todas as chaves
+all_keys = []
+
+# adiciona as keys do json de imagens a all_keys
+for items in dic_req.keys():
+    all_keys.append(items)
+
+# lista de keys com status nao lido
+unseen_keys = []
+
+for item in all_keys:
+    if dic_req[item]["status"] == "nao lido":
+        unseen_keys.append(item)
+
+
+image = dic_req[unseen_keys[0]]['img'] # get image link
+status = dic_req[unseen_keys[0]]['status'] # get image status
+if status == "nao lido":
+        dados = {"status": "lido"}
+        requisicao = requests.patch(f'{link}/Imagens/{unseen_keys[0]}/.json', data=json.dumps(dados)) # change image status
+        print(image)

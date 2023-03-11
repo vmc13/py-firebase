@@ -1,46 +1,49 @@
-firebaseConfig = {
-  "apiKey": "AIzaSyC2jah77EY53J-7xPBtg3sru8fkExCQvJ4",
-  "authDomain": "api-ba-firebase.firebaseapp.com",
-  "databaseURL": "https://api-ba-firebase-default-rtdb.firebaseio.com/",
-  "projectId": "api-ba-firebase",
-  "storageBucket": "api-ba-firebase.appspot.com",
-  "messagingSenderId": "282711538023",
-  "appId": "1:282711538023:web:32dd2aaf7a106f8cf617c2"
+# CÓDGIO BASE
+
+import requests
+import json
+
+link = "https://api-ba-firebase-default-rtdb.firebaseio.com/"
+
+# CREATE
+'''
+dados = {
+    "img": "https://pig.png",
+    "status": "nao lido"
 }
+requisicao = requests.post(f'{link}/Imagens.json', data=json.dumps(dados))
+print(requisicao)
+print(requisicao.text)
+'''
+
+# GET AND PATCH: ESPECIFICAR
+req =  requests.get(f'{link}/Imagens/.json')
+print(req)
+
+# transforma o bd json em dict python
+dic_req = req.json()
+
+# adicionar as chaves numa lista
+list_keys = []
+
+# adiciona as keys do json de imagens a list_keys
+for items in dic_req.keys():
+    #print(items)
+    list_keys.append(items)
 
 
+for item_id in dic_req:
+    image = dic_req[item_id]['img']
+    status = dic_req[item_id]['status']
+    if status == "lido":
+        dados = {"status": "nao lido"}
+        requisicao = requests.patch(f'{link}/Imagens/{item_id}/.json', data=json.dumps(dados))
+        print(image)
+    
 
-db = firebase.database()
-from flask import Flask
-from flask import request
-import requests as r
-import pyrebase
-
-firebase = pyrebase.initialize_app(firebaseConfig)
-
-app = Flask(__name__)
-
-
-@app.route("/IOTSENSE/PINS", methods=["POST","GET"])
-def handler():
-    username = request.get_data()
-    print(username.decode("utf-8"))
-    username = username.decode("utf-8")
-    result = [x.strip() for x in username.split(',')]
-    print(result)
-
-    db = firebase.database()
-    users = db.child(device).child(child).get()
-    print(users.val())
-
-    def requestHandler(message):
-        print(message["event"]) # put
-        print(message["path"]) # /-K7yGTTEp7O549EzTYtI
-        print(message["data"]) # {'title': 'Pyrebase', "body": "etc..."}
-
-    my_stream = db.child("Data").stream(requestHandler)
+    
 
 
-    if r.status_code != 200:
-     print( "Error:", r.status_code)
-    return ""
+# function to listen
+# take the first unread
+
