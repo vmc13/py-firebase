@@ -1,3 +1,3 @@
 # Python - Firebase
 
-Firebase realtime darabase data manipulation with python
+Script para manipular dados do Realtimedatabase Firebase com Python
